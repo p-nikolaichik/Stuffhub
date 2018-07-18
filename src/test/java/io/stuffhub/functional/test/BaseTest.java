@@ -7,6 +7,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,6 +22,7 @@ public class BaseTest {
 
     private static WebDriverManager manager;
     protected static WebDriver driver;
+
 
     //http://staffhub.pstlabs.by/company без логаута
     protected By enterButton = By.className("btn-co-signin");
@@ -214,7 +216,11 @@ public class BaseTest {
             WebDriverManager.chromedriver().setup();
         }
         if (driver == null) {
-            driver = new ChromeDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            if (Boolean.valueOf(System.getProperty("my.param"))) {
+                chromeOptions.addArguments("--headless");
+            }
+            driver = new ChromeDriver(chromeOptions);
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
