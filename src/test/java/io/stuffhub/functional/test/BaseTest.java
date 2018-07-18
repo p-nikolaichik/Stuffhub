@@ -190,7 +190,7 @@ public class BaseTest {
     }
 
     public WebElement findAvailableElement(By by) {
-        WebElement loadingElement = null;
+        WebElement loadingElement = driver.findElement(by);
         try {
             loadingElement = new WebDriverWait(driver, 10)
                     .until(ExpectedConditions.presenceOfElementLocated(by));
