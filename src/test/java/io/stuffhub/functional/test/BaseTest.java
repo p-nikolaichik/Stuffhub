@@ -47,7 +47,7 @@ public class BaseTest {
     protected By addNewVacancy = By.xpath("//a[@class='control-link']");
     protected By vacancyName = By.xpath("//html//form[contains(@class, 'form ng-untouched')]/div/div/input[1]");
     protected By textAreaFields = By.xpath("//textarea[contains(@class, 'input-field--textarea')]");
-    protected By regionField = By.xpath("//label[contains(text(),'Регион*')]/../input");
+    protected By regionField = By.xpath("//form/div/div/div/div/input[contains(@class, 'input-field')]");
     protected By salary = By.xpath("//div[contains(@class, 'grid__box--size-auto')]/input");
     protected By typeOfEmployment = By.xpath("//html//div/label[1]/span[1][@class='input-checkbox__decor']");
     protected By skillsRequirementsField = By.xpath("//html//div[5]/div[1]/input[1]");
@@ -190,7 +190,7 @@ public class BaseTest {
     }
 
     public WebElement findAvailableElement(By by) {
-        WebElement loadingElement = driver.findElement(by);
+        WebElement loadingElement = null;
         try {
             loadingElement = new WebDriverWait(driver, 10)
                     .until(ExpectedConditions.presenceOfElementLocated(by));
