@@ -43,7 +43,7 @@ public class BaseTest {
     protected By myCandidatesItem = By.xpath("//a[@routerlink='/company/cabinet/candidates']");
     protected By companyMenuContainer = By.xpath("//nav[contains(@class, 'cabinet__menu')]");
 
-    //http://staffhub.pstlabs.by/company/cabinet/vacancies
+    //http://staffhub.pstlabs.by/company/cabinet/vacancies/
     protected By addNewVacancy = By.xpath("//a[@class='control-link']");
     protected By vacancyName = By.xpath("//html//form[contains(@class, 'form ng-untouched')]/div/div/input[1]");
     protected By textAreaFields = By.xpath("//textarea[contains(@class, 'input-field--textarea')]");
