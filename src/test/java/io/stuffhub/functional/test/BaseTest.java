@@ -245,8 +245,8 @@ public class BaseTest {
     public String getBytesOfString(String string) {
         String result = "";
         try {
-            result = new String((string).getBytes("Cp1251"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+            result = new String(string);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
