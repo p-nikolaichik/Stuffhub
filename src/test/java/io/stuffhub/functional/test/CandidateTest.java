@@ -5,14 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import java.util.List;
-
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class CandidateTest extends BaseTest{
@@ -103,7 +98,7 @@ public class CandidateTest extends BaseTest{
         while (currentTime <= 10000) {
             array = file.listFiles();
             for (int i = 0; i < array.length; i++) {
-                isExistFile = array[i].getName().contains(name);
+                isExistFile = getBytesOfString(array[i].getName()).contains(getBytesOfString(name));
                 currentTime = System.currentTimeMillis() - start;
                 if (isExistFile == true) {
                     break;

@@ -15,8 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Properties;
 
 public class BaseTest {
 
@@ -31,8 +35,6 @@ public class BaseTest {
     protected By emailField = By.id("co-email");
     protected By passwordField = By.id("co-password");
     protected By submit = By.xpath("//div/button[contains(@class,\"sh-btn-primary-green\")]");
-    protected By lookingForAJobButton = By.xpath("//a[@routerlink='/']");
-    protected String xPathAfterAcceptingInvititation = "//p[contains(text(),'В ближайшее время с Вами свяжется представитель ко')]";
 
     //all menu item in dropdown after login
     protected By loginDropdown = By.id("dropdownBasic1");
@@ -130,7 +132,7 @@ public class BaseTest {
     protected By addCertificate = By.xpath("//div[@class='certificate-add']");
     protected By downloadPhotoButton = By.xpath("//label[@class='certificate-add-pic']/../div/input");
     protected By downloadPhotoText = By.xpath("//label[@class='certificate-add-pic']");
-    protected By saveChanges = By.xpath("//a[@class='edit'][contains(text(),'Сохранить изменения')]");
+    protected By saveChanges = By.xpath("//h2[contains(@class, 'top-pan')]/a[1]");
     protected By cancelEditButton = By.xpath("//h2[contains(@class, 'top-pan')]/a[2]");
     protected By certificateName = By.xpath("//textarea[@maxlength='255']");
     protected By deleteCertificateButton = By.xpath("//div[@class='certificate-delete']");
@@ -176,7 +178,7 @@ public class BaseTest {
                 }
             });
         } catch (Exception e) {
-            System.out.println("Spinner has't been appeared during 1 second. There is no sense in waiting for his disappearance");
+            logger.error("Spinner has't been appeared during 1 second. There is no sense in waiting for his disappearance", e);
         }
     }
 
@@ -184,7 +186,7 @@ public class BaseTest {
         try {
             new WebDriverWait(driver, 1).until(ExpectedConditions.invisibilityOfElementLocated(by));
         } catch (Exception e) {
-            System.out.println("Element has't been visible or present in DOM, so ExpectedConditions can't wait his invisibility");
+            logger.error("Element has't been visible or present in DOM, so ExpectedConditions can't wait his invisibility", e);
         }
 
     }
@@ -195,8 +197,8 @@ public class BaseTest {
             loadingElement = new WebDriverWait(driver, 10)
                     .until(ExpectedConditions.presenceOfElementLocated(by));
         } catch (Exception e) {
-            logger.warn(e.getMessage());
-            System.out.println("Element hasn't been founded on the page. Waiting was 10 seconds");
+//            logger.warn(e.getMessage());
+            logger.error("Element hasn't been founded on the page. Waiting was 10 seconds", e);
         }
         return loadingElement;
     }
@@ -205,7 +207,8 @@ public class BaseTest {
         try {
             findAvailableElement(by);
         } catch (Exception e) {
-            logger.warn(e.getMessage());
+//            logger.warn(e.getMessage());
+            logger.error("Element hasn't been founded on the page. Waiting was 10 seconds", e);
         }
 
         return driver.findElements(by);
@@ -237,6 +240,20 @@ public class BaseTest {
 
     public boolean isElementAvailable(By by) {
         return driver.findElements(by).size() == 0 ? false : true;
+    }
+
+    public String getBytesOfString(String string) {
+        String result = "";
+        try {
+            result = new String((string).getBytes("UTF-16"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String getTextOfElement(WebElement element) {
+        return getBytesOfString(element.getText());
     }
 
     @AfterSuite

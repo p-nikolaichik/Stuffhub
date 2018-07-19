@@ -5,6 +5,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -29,6 +31,7 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(submit).submit();
         String logoButton = findAvailableElement(loginDropdown).getText();
         Assert.assertEquals("eugene.astashevich@gmail.com", logoButton);
+
     }
 
     @DataProvider(name = "searchTests")
@@ -161,7 +164,8 @@ public class CompanyTest extends BaseTest{
     }
 
     @Test
-    public void editCompanyInfo() {
+    public void editCompanyInfo(){
+        System.out.println(Charset.defaultCharset());
         waitForSpinnerToBeGone(5);
         findAvailableElement(loginDropdown).click();
         findAvailableElement(myCompanyItem).click();
@@ -175,7 +179,7 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(phoneNumberField).clear();
         findAvailableElement(phoneNumberField).sendKeys("251234567");
         findAvailableElement(addressField).clear();
-        findAvailableElement(addressField).sendKeys("г. Минск, ул. Ленина, 50");
+        findAvailableElement(addressField).sendKeys(getBytesOfString("г. Минск, ул. Ленина, 50"));
         findAvailableElement(dateOfFoundation).clear();
         findAvailableElement(dateOfFoundation).sendKeys("2013");
         findAvailableElement(allCountOfStuff).clear();
@@ -183,9 +187,9 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(countStuffInRB).clear();
         findAvailableElement(countStuffInRB).sendKeys("18");
         findAvailableElement(fieldOfActivity).clear();
-        findAvailableElement(fieldOfActivity).sendKeys("IT сфера");
+        findAvailableElement(fieldOfActivity).sendKeys(getBytesOfString("IT сфера"));
         findAvailableElement(companyDescription).clear();
-        findAvailableElement(companyDescription).sendKeys("Разработка програмного обеспечения под заказ");
+        findAvailableElement(companyDescription).sendKeys(getBytesOfString("Разработка програмного обеспечения под заказ"));
 
 //        String path = Thread.currentThread().getContextClassLoader().getResource("Adhoc.png").getPath().substring(1);
 //        File file = new File("src/test/resources/Adhoc.png");
@@ -246,7 +250,7 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(saveNotFullInformations).click();
         sendInvitationToCandidate(nameOfNewVacancy);
         WebElement elementWithError = findAvailableElement(errorText);
-        Assert.assertEquals(elementWithError.getText(), "Обязательные поля вакансии не заполнены");
+        Assert.assertEquals(getTextOfElement(elementWithError), "Обязательные поля вакансии не заполнены");
         String color = elementWithError.getCssValue("background-color");
         Assert.assertEquals(color, "rgba(238, 62, 62, 1)");
     }
@@ -261,11 +265,11 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(saveButton).click();
         Assert.assertTrue(isElementAvailable(buttonClosePopup));
         findAvailableElement(saveNotFullInformations).click();
-        Assert.assertEquals(findAvailableElement(textWhenInfoIsNotFull).getText(), "Данные о компании не заполнены," +
+        Assert.assertEquals(getTextOfElement(findAvailableElement(textWhenInfoIsNotFull)), "Данные о компании не заполнены," +
                 " вы не можете просматривать полные резюме и приглашать кандидатов на собеседования");
         sendInvitationToCandidate(nameOfNewVacancy);
         WebElement elementWithError = findAvailableElement(errorText);
-        Assert.assertEquals(elementWithError.getText(), "Обязательные поля компании не заполнены");
+        Assert.assertEquals(getTextOfElement(elementWithError), "Обязательные поля компании не заполнены");
         Assert.assertEquals(elementWithError.getCssValue("background-color"), "rgba(238, 62, 62, 1)");
         findAvailableElement(loginDropdown).click();
         findAvailableElement(myCompanyItem).click();
