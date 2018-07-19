@@ -242,20 +242,6 @@ public class BaseTest {
         return driver.findElements(by).size() == 0 ? false : true;
     }
 
-    public String getBytesOfString(String string) {
-        String result = "";
-        try {
-            result = new String(string);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public String getTextOfElement(WebElement element) {
-        return getBytesOfString(element.getText());
-    }
-
     @AfterSuite
     public void logout() {
         driver.quit();

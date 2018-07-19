@@ -27,7 +27,7 @@ public class CompanyAndCandidate extends BaseTest {
     private String companyPage;
     private String candidatePage;
     private String nameOfCurrentVacancy;
-    private String nameOfCandidate = getBytesOfString("Евгений Асташевич");
+    private String nameOfCandidate = "Евгений Асташевич";
 
     @BeforeMethod (groups = "Invitations")
     public void checkInvitations() throws Exception{
@@ -50,14 +50,14 @@ public class CompanyAndCandidate extends BaseTest {
         findAvailableElement(buttonYes).click();
 
         String searchText = MessageFormat.format(".//*[text()=\"{0}\"]/../div/p", nameOfCurrentVacancy);
-        Assert.assertTrue(getTextOfElement(findAvailableElement(By.xpath(searchText))).contains("В ближайшее время с Вами свяжется представитель компаниии"));
+        Assert.assertTrue(findAvailableElement(By.xpath(searchText)).getText().contains("В ближайшее время с Вами свяжется представитель компаниии"));
 
         driver.switchTo().window(companyPage);
         findAvailableElement(loginDropdown).click();
         findAvailableElement(myCandidatesItem).click();
         Assert.assertEquals(findAvailableElement(currentVacancyName).getText(), nameOfCurrentVacancy);
         Assert.assertEquals(findAvailableElement(candidateName).getText(), nameOfCandidate);
-        Assert.assertEquals(getTextOfElement(findAvailableElement(candidateAcceptedInvitationText)), "Кандидат принял приглашение");
+        Assert.assertEquals(findAvailableElement(candidateAcceptedInvitationText).getText(), "Кандидат принял приглашение");
         checkIndicatorsOfCandidateActions("1", "1", "0", "0");
     }
 
@@ -94,7 +94,7 @@ public class CompanyAndCandidate extends BaseTest {
         findAvailableElement(companyMenuContainer);
         Assert.assertEquals(findAvailableElement(currentVacancyName).getText(), nameOfCurrentVacancy);
         Assert.assertEquals(findAvailableElement(candidateName).getText(), "#1");
-        Assert.assertEquals(getTextOfElement(findAvailableElement(candidateAcceptedInvitationText)), "Кандидат отклонил приглашение");
+        Assert.assertEquals(findAvailableElement(candidateAcceptedInvitationText).getText(), "Кандидат отклонил приглашение");
         checkIndicatorsOfCandidateActions("1", "0", "0", "1");
     }
 
@@ -118,7 +118,7 @@ public class CompanyAndCandidate extends BaseTest {
 
         String xPathOfTextNotActualVacancy = getXpathByTextInSelector(nameOfCurrentVacancy) + "/../p[3]";
         WebElement elementOfNotActualVacancy = findAvailableElement(By.xpath(xPathOfTextNotActualVacancy));
-        String textNotActualVacancy = getTextOfElement(elementOfNotActualVacancy);
+        String textNotActualVacancy = elementOfNotActualVacancy.getText();
         Assert.assertEquals(textNotActualVacancy, "Извините, данная вакансия больше не актуальна.");
         String color = elementOfNotActualVacancy.getCssValue("color").toString();
         Assert.assertEquals(color, "rgba(223, 127, 127, 1)");
