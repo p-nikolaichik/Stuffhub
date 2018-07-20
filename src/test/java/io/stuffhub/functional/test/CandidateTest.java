@@ -110,7 +110,7 @@ public class CandidateTest extends BaseTest{
             for (int i = 0; i < array.length; i++) {
                 isExistFile = array[i].getName().contains(name);
                 currentTime = System.currentTimeMillis() - start;
-                if (isExistFile == true || currentTime > 10000) {
+                if (isExistFile == true) {
                     break;
                 }
             }
