@@ -242,7 +242,7 @@ public class BaseTest {
     public static void setDirectoryToDownload() {
 //        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
 //        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
-        ChromeOptions options = new ChromeOptions();
+        chromeOptions = new ChromeOptions();
 
     }
 
