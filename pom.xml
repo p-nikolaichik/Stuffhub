@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <headlessMode>
-            false
+            true
         </headlessMode>
     </properties>
 

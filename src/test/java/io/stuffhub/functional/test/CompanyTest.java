@@ -242,7 +242,6 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(regionField).sendKeys(Keys.CONTROL + "a");
         findAvailableElement(regionField).sendKeys(Keys.BACK_SPACE);
         findAvailableElement(saveButton).click();
-        Assert.assertTrue(isElementAvailable(buttonClosePopup));
         findAvailableElement(saveNotFullInformations).click();
         sendInvitationToCandidate(nameOfNewVacancy);
         WebElement elementWithError = findAvailableElement(errorText);
@@ -259,7 +258,6 @@ public class CompanyTest extends BaseTest{
         findAvailableElement(websiteField).sendKeys(Keys.CONTROL + "a");
         findAvailableElement(websiteField).sendKeys(Keys.BACK_SPACE);
         findAvailableElement(saveButton).click();
-        Assert.assertTrue(isElementAvailable(buttonClosePopup));
         findAvailableElement(saveNotFullInformations).click();
         Assert.assertEquals(findAvailableElement(textWhenInfoIsNotFull).getText(), "Данные о компании не заполнены," +
                 " вы не можете просматривать полные резюме и приглашать кандидатов на собеседования");

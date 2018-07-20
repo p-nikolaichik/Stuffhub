@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class BaseTest {
@@ -239,16 +240,10 @@ public class BaseTest {
     }
 
     public static void setDirectoryToDownload() {
-        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
-        String downloadFilepath = pathToDownload.getAbsoluteFile().toString();
-        HashMap<String, Object> chromePrefs = new HashMap<>();
-        chromePrefs.put("profile.default_content_settings.popups", 0);
-        chromePrefs.put("download.default_directory", downloadFilepath);
-        chromeOptions = new ChromeOptions();
-        chromeOptions.setExperimentalOption("prefs", chromePrefs);
-        DesiredCapabilities cap = DesiredCapabilities.chrome();
-        cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-        cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+//        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
+//        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
+        ChromeOptions options = new ChromeOptions();
+
     }
 
     public String getRandomString() {
@@ -258,10 +253,6 @@ public class BaseTest {
     public String getXpathByTextInSelector(String textInSelector) {
         String xPath = MessageFormat.format(".//*[text()=\"{0}\"]", textInSelector);
         return xPath;
-    }
-
-    public boolean isElementAvailable(By by) {
-        return driver.findElements(by).size() == 0 ? false : true;
     }
 
     @AfterSuite
