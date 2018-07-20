@@ -39,7 +39,6 @@ public class TestTask {
         while (scanner.hasNext()) {
             responseText += scanner.nextLine();
         }
-        System.out.println(responseText);
 
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(responseText);
@@ -54,14 +53,11 @@ public class TestTask {
         while (scanner.hasNext()) {
             responseText += scanner.nextLine();
         }
-        System.out.println(responseText);
 
         parser = new JSONParser();
         json = (JSONObject) parser.parse(responseText);
         totalPages = json.get("totalPages").toString();
-        System.out.println(totalPages);
         totalRecords = json.get("records").toString();
-        System.out.println(totalRecords);
 
     }
 

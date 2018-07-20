@@ -1,6 +1,7 @@
 package io.stuffhub.functional.test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -233,6 +234,7 @@ public class BaseTest {
             } else {
                 chromeOptions = new ChromeOptions();
             }
+//            setDirectoryToDownload();
             driver = new ChromeDriver(chromeOptions);
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -240,9 +242,20 @@ public class BaseTest {
     }
 
     public static void setDirectoryToDownload() {
-//        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
+
+        String downloadFilePath = FileUtils.getUserDirectoryPath();
+        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
 //        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
+
+        HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", downloadFilePath);
         chromeOptions = new ChromeOptions();
+        chromeOptions.setExperimentalOption("prefs", chromePrefs);
+//        DesiredCapabilities cap = DesiredCapabilities.chrome();
+//        cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+//        cap.setCapability(ChromeOptions.CAPABILITY, options);
+//        WebDriver driver = new ChromeDriver(cap);
 
     }
 
