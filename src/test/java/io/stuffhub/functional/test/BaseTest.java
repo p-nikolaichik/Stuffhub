@@ -1,13 +1,19 @@
 package io.stuffhub.functional.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -170,8 +176,13 @@ public class BaseTest {
     private Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
 
-    public BaseTest() {
-        setup();
+    public BaseTest(){
+        try {
+            setup();
+        } catch (Exception e){
+
+        }
+
     }
 
     public void waitForSpinnerToBeGone(int timeout) {
@@ -222,7 +233,7 @@ public class BaseTest {
         return driver.findElements(by);
     }
 
-    public static void setup() {
+    public static void setup() throws Exception{
         if (manager == null) {
             WebDriverManager.chromedriver().setup();
         }
@@ -230,33 +241,51 @@ public class BaseTest {
 
             if (Boolean.valueOf(System.getProperty("my.param"))) {
                 setDirectoryToDownload();
-                chromeOptions.addArguments("--headless");
+//                chromeOptions.addArguments("--headless");
             } else {
                 chromeOptions = new ChromeOptions();
+                driver = new ChromeDriver(chromeOptions);
             }
 //            setDirectoryToDownload();
-            driver = new ChromeDriver(chromeOptions);
+
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
     }
 
-    public static void setDirectoryToDownload() {
+    public static void setDirectoryToDownload() throws Exception{
 
-        String downloadFilePath = FileUtils.getUserDirectoryPath();
         pathToDownload = new File(System.getProperty("java.io.tmpdir"));
-//        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
+        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
+//        HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+//        chromePrefs.put("profile.default_content_settings.popups", 0);
+//        chromePrefs.put("download.default_directory", downloadFilePath);
+//        chromeOptions = new ChromeOptions();
+//        chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
-        HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
-        chromePrefs.put("profile.default_content_settings.popups", 0);
-        chromePrefs.put("download.default_directory", downloadFilePath);
-        chromeOptions = new ChromeOptions();
-        chromeOptions.setExperimentalOption("prefs", chromePrefs);
-//        DesiredCapabilities cap = DesiredCapabilities.chrome();
-//        cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-//        cap.setCapability(ChromeOptions.CAPABILITY, options);
-//        WebDriver driver = new ChromeDriver(cap);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--test-type");
+        options.addArguments("--headless");
+        options.addArguments("--disable-extensions"); //to disable browser extension popup
 
+        ChromeDriverService driverService = ChromeDriverService.createDefaultService();
+        ChromeDriver driver = new ChromeDriver(driverService, options);
+
+        Map<String, Object> commandParams = new HashMap<>();
+        commandParams.put("cmd", "Page.setDownloadBehavior");
+        Map<String, String> params = new HashMap<>();
+        params.put("behavior", "allow");
+        params.put("downloadPath", downloadFilePath);
+        commandParams.put("params", params);
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        String command = objectMapper.writeValueAsString(commandParams);
+        String u = driverService.getUrl().toString() + "/session/" + driver.getSessionId() + "/chromium/send_command";
+        HttpPost request = new HttpPost(u);
+        request.addHeader("content-type", "application/json");
+        request.setEntity(new StringEntity(command));
+        httpClient.execute(request);
+        BaseTest.driver = driver;
     }
 
     public String getRandomString() {
