@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -26,6 +30,8 @@ public class BaseTest {
 
     private static WebDriverManager manager;
     protected static WebDriver driver;
+    private static ChromeOptions chromeOptions;
+    protected static File pathToDownload;
 
 
     //http://staffhub.pstlabs.by/company без логаута
@@ -219,14 +225,30 @@ public class BaseTest {
             WebDriverManager.chromedriver().setup();
         }
         if (driver == null) {
-            ChromeOptions chromeOptions = new ChromeOptions();
+
             if (Boolean.valueOf(System.getProperty("my.param"))) {
+                setDirectoryToDownload();
                 chromeOptions.addArguments("--headless");
+            } else {
+                chromeOptions = new ChromeOptions();
             }
             driver = new ChromeDriver(chromeOptions);
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
+    }
+
+    public static void setDirectoryToDownload() {
+        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
+        String downloadFilepath = pathToDownload.getAbsoluteFile().toString();
+        HashMap<String, Object> chromePrefs = new HashMap<>();
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", downloadFilepath);
+        chromeOptions = new ChromeOptions();
+        chromeOptions.setExperimentalOption("prefs", chromePrefs);
+        DesiredCapabilities cap = DesiredCapabilities.chrome();
+        cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
     }
 
     public String getRandomString() {

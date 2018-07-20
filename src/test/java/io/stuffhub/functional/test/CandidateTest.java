@@ -2,11 +2,16 @@ package io.stuffhub.functional.test;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
 import java.util.List;
 
 import java.awt.*;
@@ -94,7 +99,7 @@ public class CandidateTest extends BaseTest{
     }
 
     public boolean isDownloadedFileOnDisk(String name) {
-        File file = new File("C:\\Users\\Admin2\\Downloads");
+        File file = pathToDownload == null ? new File("C:\\Users\\Admin2\\Downloads") : pathToDownload;
         File[] array;
         boolean isExistFile = false;
 
