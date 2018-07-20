@@ -105,12 +105,12 @@ public class CandidateTest extends BaseTest{
 
         long start = System.currentTimeMillis();
         long currentTime = 0;
-        while (currentTime <= 10000) {
+        while (true) {
             array = file.listFiles();
             for (int i = 0; i < array.length; i++) {
                 isExistFile = array[i].getName().contains(name);
                 currentTime = System.currentTimeMillis() - start;
-                if (isExistFile == true) {
+                if (isExistFile == true || currentTime > 10000) {
                     break;
                 }
             }
