@@ -38,7 +38,6 @@ public class BaseTest {
 
     private static WebDriverManager manager;
     protected static WebDriver driver;
-    private static ChromeOptions chromeOptions;
     protected static File pathToDownload;
 
 
@@ -241,13 +240,9 @@ public class BaseTest {
 
             if (Boolean.valueOf(System.getProperty("my.param"))) {
                 setDirectoryToDownload();
-//                chromeOptions.addArguments("--headless");
             } else {
-                chromeOptions = new ChromeOptions();
-                driver = new ChromeDriver(chromeOptions);
+                driver = new ChromeDriver();
             }
-//            setDirectoryToDownload();
-
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
@@ -257,11 +252,6 @@ public class BaseTest {
 
         pathToDownload = new File(System.getProperty("java.io.tmpdir"));
         String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
-//        HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
-//        chromePrefs.put("profile.default_content_settings.popups", 0);
-//        chromePrefs.put("download.default_directory", downloadFilePath);
-//        chromeOptions = new ChromeOptions();
-//        chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--test-type");
