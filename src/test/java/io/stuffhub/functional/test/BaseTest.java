@@ -1,5 +1,7 @@
 package io.stuffhub.functional.test;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +40,8 @@ public class BaseTest {
 
     private static WebDriverManager manager;
     protected static WebDriver driver;
-    protected static File pathToDownload;
+    protected static File newPathToDownload;
+    protected Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
 
     //http://staffhub.pstlabs.by/company без логаута
@@ -172,7 +175,7 @@ public class BaseTest {
     protected By improveCVItem = By.xpath("//a[@routerlink='recomendations']");
 
     protected By spinner = By.xpath("//app-spinner");
-    private Logger logger = LoggerFactory.getLogger(BaseTest.class);
+
 
 
     public BaseTest(){
@@ -212,6 +215,7 @@ public class BaseTest {
     public WebElement findAvailableElement(By by) {
         WebElement loadingElement = null;
         try {
+            logger.info("looking element by xpath - " + by.toString());
             loadingElement = new WebDriverWait(driver, 10)
                     .until(ExpectedConditions.presenceOfElementLocated(by));
         } catch (Exception e) {
@@ -237,12 +241,7 @@ public class BaseTest {
             WebDriverManager.chromedriver().setup();
         }
         if (driver == null) {
-
-            if (Boolean.valueOf(System.getProperty("my.param"))) {
-                setDirectoryToDownload();
-            } else {
-                driver = new ChromeDriver();
-            }
+            setDirectoryToDownload();
             driver.manage().window().maximize();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
@@ -250,22 +249,27 @@ public class BaseTest {
 
     public static void setDirectoryToDownload() throws Exception{
 
-        pathToDownload = new File(System.getProperty("java.io.tmpdir"));
-        String downloadFilePath = pathToDownload.getAbsoluteFile().toString();
+        File pathToDownload = new File(System.getProperty("java.io.tmpdir"));
+        newPathToDownload = new File(pathToDownload.getAbsolutePath() + "\\test");
+        newPathToDownload.mkdir();
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--test-type");
-        options.addArguments("--headless");
+        if (Boolean.valueOf(System.getProperty("my.param"))) {
+            options.addArguments("--headless");
+        }
         options.addArguments("--disable-extensions"); //to disable browser extension popup
 
         ChromeDriverService driverService = ChromeDriverService.createDefaultService();
         ChromeDriver driver = new ChromeDriver(driverService, options);
+//        Configuration.browser = "chrome";
+//        WebDriverRunner.setWebDriver(driver);
 
         Map<String, Object> commandParams = new HashMap<>();
         commandParams.put("cmd", "Page.setDownloadBehavior");
         Map<String, String> params = new HashMap<>();
         params.put("behavior", "allow");
-        params.put("downloadPath", downloadFilePath);
+        params.put("downloadPath", newPathToDownload.toString());
         commandParams.put("params", params);
         ObjectMapper objectMapper = new ObjectMapper();
         HttpClient httpClient = HttpClientBuilder.create().build();

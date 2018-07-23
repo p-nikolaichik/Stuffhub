@@ -1,6 +1,5 @@
 package io.stuffhub.functional.test;
 
-import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,9 +8,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Scanner;
 
 /**

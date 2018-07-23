@@ -1,5 +1,7 @@
 package io.stuffhub.functional.test;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -11,6 +13,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +23,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import org.slf4j.Logger;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class CandidateTest extends BaseTest{
 
@@ -88,39 +95,42 @@ public class CandidateTest extends BaseTest{
 
     @Test(priority = 2)
     public void downloadCVPdf() {
+        waitForSpinnerToBeGone(5);
         findAvailableElement(downloadPDFCV).click();
-        Assert.assertTrue(isDownloadedFileOnDisk("Резюме_Евгений_Асташевич"));
+        checkDownloadedFileOnDisk("Резюме_Евгений_Асташевич");
     }
 
     @Test(priority = 3, dependsOnMethods = "editProfile")
     public void downloadCertificatePdf() {
+        waitForSpinnerToBeGone(5);
         findAvailableElement(downloadPdf).click();
-        Assert.assertTrue(isDownloadedFileOnDisk("Adhoc.png"));
+        checkDownloadedFileOnDisk("Adhoc.png");
     }
 
-    public boolean isDownloadedFileOnDisk(String name) {
-        File file = pathToDownload == null ? new File("C:\\Users\\Admin2\\Downloads") : pathToDownload;
-        File[] array;
-        boolean isExistFile = false;
+    public void checkDownloadedFileOnDisk(String name) {
+        File[] list = newPathToDownload.listFiles();
+        long startTime = System.currentTimeMillis();
+        while (ArrayUtils.isEmpty(list)) {
+            long currentTime = System.currentTimeMillis() - startTime;
+            list = newPathToDownload.listFiles();
+            if (currentTime >= 4000) {
 
-        long start = System.currentTimeMillis();
-        long currentTime = 0;
-        while (currentTime <= 10000) {
-            array = file.listFiles();
-            for (int i = 0; i < array.length; i++) {
-                isExistFile = array[i].getName().contains(name);
-                currentTime = System.currentTimeMillis() - start;
-                if (isExistFile == true) {
-                    break;
-                }
+                break;
             }
         }
-        return isExistFile;
+        Assert.assertTrue(list[0].getName().contains(name));
+        try {
+            FileUtils.forceDelete(newPathToDownload);
+        } catch (IOException e) {
+            logger.error("File hasn't been removed");
+            e.printStackTrace();
+        }
     }
 
     @Override
     @AfterClass
     public void logout() {
+        waitForSpinnerToBeGone(5);
         findAvailableElement(logoutButton).click();
     }
 }
