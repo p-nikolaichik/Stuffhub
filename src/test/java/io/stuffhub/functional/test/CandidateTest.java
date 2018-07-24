@@ -60,6 +60,7 @@ public class CandidateTest extends BaseTest{
 
         waitForSpinnerToBeGone( 5);
         elementDisappearing(cancelEditButton);
+        waitForSpinnerToBeGone( 5);
     }
 
     private void deleteAllCertificates() {
@@ -93,17 +94,18 @@ public class CandidateTest extends BaseTest{
 //        robot.keyRelease(KeyEvent.VK_ENTER);
 //    }
 
-    @Test(priority = 2)
+    @Test()
     public void downloadCVPdf() {
         waitForSpinnerToBeGone(5);
         findAvailableElement(downloadPDFCV).click();
+        waitForSpinnerToBeGone(5);
         checkDownloadedFileOnDisk("Резюме_Евгений_Асташевич");
     }
 
-    @Test(priority = 3, dependsOnMethods = "editProfile")
+    @Test(dependsOnMethods = "editProfile")
     public void downloadCertificatePdf() {
-        waitForSpinnerToBeGone(5);
         findAvailableElement(downloadPdf).click();
+        waitForSpinnerToBeGone(5);
         checkDownloadedFileOnDisk("Adhoc.png");
     }
 
