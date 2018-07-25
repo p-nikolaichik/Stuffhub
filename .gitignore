@@ -1,5 +1,4 @@
 .idea
-.idea/*
-
 target
-target/*
+build
+*StuffHub.iml
