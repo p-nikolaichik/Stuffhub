@@ -41,7 +41,7 @@ public class TestTask {
         JSONObject json = (JSONObject) parser.parse(responseText);
         String token = json.get("token").toString();
 
-        HttpGet get = new HttpGet("http://192.168.50.19:8060/staffhub/candidate/invitations?page=1");
+        HttpGet get = new HttpGet("http://192.168.50.19:8060/staffhub/Candidate/invitations?page=1");
         get.setHeader("Authorization" ,token);
         response = httpClient.execute(get);
         inputStream = response.getEntity().getContent();

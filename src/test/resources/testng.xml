@@ -1,16 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Suite1" verbose="1" >
-    <test name="Company" >
-        <classes>
-            <class name="io.stuffhub.functional.test.CompanyTest"></class>
-        </classes>
-    </test>
-    <test name="Candidate" >
-        <classes>
-            <class name="io.stuffhub.functional.test.CandidateTest"></class>
-        </classes>
-    </test>
     <test name="CompanyAndCandidate" >
         <classes>
             <class name="io.stuffhub.functional.test.CompanyAndCandidate"></class>

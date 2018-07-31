@@ -109,7 +109,7 @@ public class BaseTest {
 //    protected By  = By.xpath("");
 
     //http://staffhub.pstlabs.by/company/candidatecard/full
-    protected By fullCVButton = By.xpath("//app-candidate-card/div/div[1]/div[2]/a");
+    protected By fullCVButton = By.xpath("//app-Candidate-card/div/div[1]/div[2]/a");
     protected By realUserSkills = By.className("skill-name");
     protected By technologies = By.xpath("//app-full/div[2]/div/div[5]/div/div[2]/div/p/span");
     protected By returnToSearchResult = By.xpath("//a[contains(@class, \"return\")]/span");
@@ -155,7 +155,7 @@ public class BaseTest {
     protected By changeAvatarButton = By.xpath("//div[contains(@class, 'user-pic')]/input");
     protected By changeAvatarText = By.xpath("//div[contains(@class, 'user-pic')]/button");
     protected By downloadPDFCV = By.xpath("//a[@class='pdf']");
-    protected By logoutButton = By.xpath("//html//div[@class='bg-candidate']//li[5]/a[1]");
+    protected By logoutButton = By.xpath("//html//div[@class='bg-Candidate']//li[5]/a[1]");
     protected By downloadPdf = By.xpath("//h5[@class='certificate']");
 
     //Client Invitations page
